@@ -1,0 +1,85 @@
+{
+  "products": [
+    {
+      "Product_Code": "49503000",
+      "Product_Name": "92mm Stud 0.75bmt 3.0m",
+      "Supplier_Name": "Bell Plaster",
+      "UOM": "EACH",
+      "Rate_Ex_GST": 14.16,
+      "Installation_Category": "Framing Wall",
+      "id": 1
+    },
+    {
+      "Product_Code": "12903600",
+      "Product_Name": "28mm Furring Channel 3.6m",
+      "Supplier_Name": "Bell Plaster",
+      "UOM": "LM",
+      "Rate_Ex_GST": 2.12,
+      "Installation_Category": "Framing Ceiling",
+      "id": 2
+    },
+    {
+      "Product_Code": "72-3810",
+      "Product_Name": "80mm Super L Bead Archway Trim-Tex",
+      "Supplier_Name": "CSP",
+      "UOM": "EACH",
+      "Rate_Ex_GST": 15.37,
+      "Installation_Category": "Others",
+      "id": 3
+    },
+    {
+      "Product_Code": "1001",
+      "Product_Name": "Test name",
+      "Supplier_Name": "Test supplier",
+      "UOM": "parcel",
+      "Rate_Ex_GST": "10",
+      "Installation_Category": "test category",
+      "id": 4
+    },
+    {
+      "Product_Code": "9991",
+      "Product_Name": "Try Name",
+      "Supplier_Name": "Try Supplier",
+      "UOM": "Each",
+      "Rate_Ex_GST": "123.21",
+      "Installation_Category": "Wall Try",
+      "id": 5
+    },
+    {
+      "Product_Code": "1002",
+      "Product_Name": "Test Product 3",
+      "Supplier_Name": "Test Supplier 3",
+      "UOM": "Each",
+      "Rate_Ex_GST": "10.03",
+      "Installation_Category": "Test Category 3",
+      "id": 6
+    },
+    {
+      "Product_Code": "Test 4",
+      "Product_Name": "Test 4",
+      "Supplier_Name": "Test 4",
+      "UOM": "111",
+      "Rate_Ex_GST": "11",
+      "Installation_Category": "Test 4",
+      "id": 7
+    },
+    {
+      "Product_Code": "Test 5",
+      "Product_Name": "Test 5",
+      "Supplier_Name": "Test 5",
+      "UOM": "113",
+      "Rate_Ex_GST": "113",
+      "Installation_Category": "Test 5",
+      "id": 8
+    },
+    {
+      "Product_Code": "1005",
+      "Product_Name": "Test",
+      "Supplier_Name": "Supplier test",
+      "UOM": "Box",
+      "Rate_Ex_GST": "20",
+      "Installation_Category": "Framing wall",
+      "id": 9
+    }
+  ]
+}
