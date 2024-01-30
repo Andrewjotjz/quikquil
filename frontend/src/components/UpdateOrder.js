@@ -272,65 +272,89 @@ if (error_Orders) {
 
 return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : (
   <div>
-    <form onSubmit={handleSubmitUpdate}>
+    <form onSubmit={handleSubmitUpdate} className='update-order-form'>
       <h1>Update Order</h1>
-      <label>
-        {
-        `New Order No: ${orderNo}`
-        }
-      </label>
-      <label>
-        Project:
-        <select value={newProject} onChange={(e) => setProject(e.target.value)} required>
-          <option value="" disabled>Select a Project</option>
-          {projects &&
-          projects.map((project) => (
-          <option key={project._id} value={project.Project_ID}>
-              {project.Project_ID}
-          </option>
-          ))
-          }
-        </select>
-      </label>
-      <label>
-        Location:
-        <input required type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-      </label>
-      <label>
-        Supplier Name: <input type="text" value={supplier} disabled />
-      </label>
-      <br />
-      <label>
-        Order Date:
-        <input required type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Delivery Datetime:
-        <input
-          required
-          type="datetime-local"
-          value={deliveryDatetime}
-          onChange={(e) => setDeliveryDatetime(e.target.value)}
-        />
-      </label>
-      <br />
-      <h3>Products:</h3>
-      <fieldset id="fieldset-filter">
-        <legend>Apply Filter:</legend>
-          <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Plasterboard")}/>
-          <label htmlFor="plasterboard">Plasterboard</label>
-          <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Wall")}/>
-          <label htmlFor="framing_wall">Framing Wall</label>
-          <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Ceiling")}/>
-          <label htmlFor="framing_ceiling">Framing Ceiling</label>
-          <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Insulation")}/>
-          <label htmlFor="insulation">Insulation</label>
-          <input type="checkbox" id="chk-others" name="others" value="Others" checked disabled/>
-          <label htmlFor="others">Others</label>
-      </fieldset>
-      
+
       <div>
+        <label>
+          {
+          `New Order No: ${orderNo}`
+          }
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Project:
+          <select value={newProject} onChange={(e) => setProject(e.target.value)} required>
+            <option value="" disabled>Select a Project</option>
+            {projects &&
+            projects.map((project) => (
+            <option key={project._id} value={project.Project_ID}>
+                {project.Project_ID}
+            </option>
+            ))
+            }
+          </select>
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Location:
+          <input required type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Supplier Name: <input type="text" value={supplier} disabled />
+        </label>
+      </div>
+
+      <br />
+
+      <div>
+        <label>
+          Order Date:
+          <input required type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
+        </label>
+      </div>
+
+      <br />
+
+      <div>
+        <label>
+          Delivery Datetime:
+          <input
+            required
+            type="datetime-local"
+            value={deliveryDatetime}
+            onChange={(e) => setDeliveryDatetime(e.target.value)}
+          />
+        </label>
+      </div>
+
+      <br />
+
+      <div className='update-order-product-filter'>
+      <h3>Products:</h3>
+        <fieldset id="fieldset-filter">
+          <legend>Apply Filter:</legend>
+            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Plasterboard")}/>
+            <label htmlFor="plasterboard">Plasterboard</label>
+            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Wall")}/>
+            <label htmlFor="framing_wall">Framing Wall</label>
+            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Ceiling")}/>
+            <label htmlFor="framing_ceiling">Framing Ceiling</label>
+            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Insulation")}/>
+            <label htmlFor="insulation">Insulation</label>
+            <input type="checkbox" id="chk-others" name="others" value="Others" checked disabled/>
+            <label htmlFor="others">Others</label>
+        </fieldset>
+      </div>
+      
+      <div className='update-order-select-products'>
         <label>
           Product Code:
           <select value={selectedProductCode} onChange={(e) => handleSelectedProduct(e.target.value)}>
@@ -361,14 +385,18 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
 
 
 
-      <br />
-      <button type="submit">Update</button>
+    <br />
+    <button type="submit">Update</button>
     </form>
-      <br />
-    <button type="button" onClick={handleOpenModal}>
-      Show Cart
-    </button>
-    <Cart isOpen={isModalOpen} onClose={handleCloseModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
+
+
+    <br />
+    <div className='update-order-cart'>
+      <button type="button" onClick={handleOpenModal}>
+        Show Cart
+      </button>
+      <Cart isOpen={isModalOpen} onClose={handleCloseModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
+    </div>
   </div>
   );
 };

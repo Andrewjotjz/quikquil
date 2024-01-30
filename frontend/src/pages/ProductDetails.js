@@ -99,7 +99,7 @@ const ProductDetails = () => {
   }
 
   return ( 
-      <div className="productdetails">
+      <div className="product-details">
         <h1>Product Details</h1>
         {products && 
         <h2>Product: {products.Product_Name}</h2>}
