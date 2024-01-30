@@ -382,80 +382,104 @@ if (error_Orders) {
 
 return isPendingProducts || isPendingProjects || isPendingOrders ?  (<div>Loading data...</div>) : (
   <div>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='new-order-form'>
       <h1>New Order</h1>
-      <label>
-        {
-        `New Order No: ${orders && orders.length === 0 ? 2001 : 
-        orders.slice().sort((a, b) => a.Order_No - b.Order_No)[orders.slice().sort((a, b) => a.Order_No - b.Order_No).length - 1].Order_No + 1}`
-        }
-      </label>
-      <label>
-        Project:
-        <select value={newProject} onChange={(e) => setProject(e.target.value)} required>
-          <option value="" disabled>Select a Project</option>
-          {projects &&
-          projects.map((project) => (
-          <option key={project._id} value={project.Project_ID}>
-              {project.Project_ID}
-          </option>
-          ))
-          }
-        </select>
-      </label>
-      <label>
-        Location:
-        <input required type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-      </label>
-      <label>
-        Supplier Name:
-        <select value={supplier} onChange={(e) => handleSupplierChange(e.target.value)}>
-          <option value="" disabled>Select a supplier</option>
-          <option value="Bell Plaster">Bell Plaster</option>
-          <option value="Intex">Intex</option>
-          <option value="SpeedPanel">SpeedPanel</option>
-          <option value="AllFasterner">AllFasterner</option>
-          <option value="Hilti">Hilti</option>
-          <option value="CSP Plasterboard">CSP Plasterboard</option>
-          <option value="K8">K8</option>
-          <option value="Comfab">Comfab</option>
-          <option value="Demar H Hardware">Demar H Hardware</option>
-          <option value="Prostud">Prostud</option>
-          <option value="United Equipment">United Equipment</option>
-        </select>
-      </label>
-      <br />
-      <label>
-        Order Date:
-        <input required type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Delivery Datetime:
-        <input
-          required
-          type="datetime-local"
-          value={deliveryDatetime}
-          onChange={(e) => setDeliveryDatetime(e.target.value)}
-        />
-      </label>
-      <br />
-      <h3>Products:</h3>
-      <fieldset hidden id="fieldset-filter">
-        <legend>Apply Filter:</legend>
-          <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} />
-          <label htmlFor="plasterboard">Plasterboard</label>
-          <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)}/>
-          <label htmlFor="framing_wall">Framing Wall</label>
-          <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)}/>
-          <label htmlFor="framing_ceiling">Framing Ceiling</label>
-          <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)}/>
-          <label htmlFor="insulation">Insulation</label>
-          <input type="checkbox" id="chk-others" name="others" checked disabled value="Others"/>
-          <label htmlFor="others">Others</label>
-      </fieldset>
-      
+
       <div>
+        <label>
+          {
+          `New Order No: ${orders && orders.length === 0 ? 2001 : 
+          orders.slice().sort((a, b) => a.Order_No - b.Order_No)[orders.slice().sort((a, b) => a.Order_No - b.Order_No).length - 1].Order_No + 1}`
+          }
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Project:
+          <select value={newProject} onChange={(e) => setProject(e.target.value)} required>
+            <option value="" disabled>Select a Project</option>
+            {projects &&
+            projects.map((project) => (
+            <option key={project._id} value={project.Project_ID}>
+                {project.Project_ID}
+            </option>
+            ))
+            }
+          </select>
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Location:
+          <input required type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Supplier Name:
+          <select value={supplier} onChange={(e) => handleSupplierChange(e.target.value)}>
+            <option value="" disabled>Select a supplier</option>
+            <option value="Bell Plaster">Bell Plaster</option>
+            <option value="Intex">Intex</option>
+            <option value="SpeedPanel">SpeedPanel</option>
+            <option value="AllFasterner">AllFasterner</option>
+            <option value="Hilti">Hilti</option>
+            <option value="CSP Plasterboard">CSP Plasterboard</option>
+            <option value="K8">K8</option>
+            <option value="Comfab">Comfab</option>
+            <option value="Demar H Hardware">Demar H Hardware</option>
+            <option value="Prostud">Prostud</option>
+            <option value="United Equipment">United Equipment</option>
+          </select>
+        </label>
+      </div>
+
+      <br />
+
+      <div>
+        <label>
+          Order Date:
+          <input required type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
+        </label>
+      </div>
+
+      <br />
+
+      <div>
+        <label>
+          Delivery Datetime:
+          <input
+            required
+            type="datetime-local"
+            value={deliveryDatetime}
+            onChange={(e) => setDeliveryDatetime(e.target.value)}
+          />
+        </label>
+      </div>
+
+      <br />
+
+      <div className='new-order-product-filter'>
+        <h3>Products:</h3>
+        <fieldset hidden id="fieldset-filter">
+          <legend>Apply Filter:</legend>
+            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} />
+            <label htmlFor="plasterboard">Plasterboard</label>
+            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="framing_wall">Framing Wall</label>
+            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="framing_ceiling">Framing Ceiling</label>
+            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="insulation">Insulation</label>
+            <input type="checkbox" id="chk-others" name="others" checked disabled value="Others"/>
+            <label htmlFor="others">Others</label>
+        </fieldset>
+      </div>
+      
+      <div className='new-order-select-products'>
         <label>
           Product Code:
           <select value={selectedProductCode} onChange={(e) => handleSelectedProduct(e.target.value)} onClick={handleClickProduct}>
@@ -483,17 +507,18 @@ return isPendingProducts || isPendingProjects || isPendingOrders ?  (<div>Loadin
           Add to Cart
         </button>
       </div>
-
-
-
       <br />
       <button type="submit">Submit</button>
     </form>
-      <br />
-    <button type="button" onClick={handleOpenModal}>
-      Show Cart
-    </button>
-    <Cart isOpen={isModalOpen} onClose={handleCloseModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
+
+
+    <br />
+    <div className='new-order-cart'>
+      <button type="button" onClick={handleOpenModal}>
+        Show Cart
+      </button>
+      <Cart isOpen={isModalOpen} onClose={handleCloseModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
+    </div>
   </div>
   );
 };

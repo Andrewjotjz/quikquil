@@ -122,7 +122,7 @@ const OrderDetails = () => {
   }
 
   return ( 
-      <div className="orderdetails">
+      <div className="order-details">
           {orders && 
           <h2><b>Order No:</b> {orders.Order_No}</h2>}
           <label><b>Project ID:</b> {orders.Project_ID}</label>

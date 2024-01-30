@@ -36,7 +36,7 @@ const Orders = ( {orders} ) => {
 
 
     return (
-        <table>
+        <table className='orders-table'>
           <thead>
             <tr>
               <th>Order No</th>

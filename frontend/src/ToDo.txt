@@ -48,6 +48,7 @@
 ~ In (New Order), user can filter 'Type' so it's more convenient for them to select product_name in <options> - using .filter() + map()
 ~ Also added Cart.js component and changed the design of Adding Products.
 
+(DONE)
 ***(Purchase Order - OrderList)
 ~ I want to be able to edit Order Details (PATCH request to orderdb.json)
     - FIRSTLY, we need to make a decision whether if we can edit Order Details once it's submitted
@@ -55,61 +56,45 @@
         - we need to create a view to show 'before edit' and 'after edit'
 ~ We also want to delete Order Details (DELETE request to orderdb.json)
 
+(DONE 29JAN2024)
+- change 'Other' to 'Others'
+- edited Installation_Category items
+- removed United Equipment
+- switched hard-coded supplier list to using .map()
+- switched hard-coded Product_UOM to using .map and .filter()
+
+1. When Update Order page is rendered, we will save a copy of the data. User will make changes to the order, user will need to add comment for changes.
+- In Purchase Order details, there will be a section that shows recent changes.
+a. Create a new entry for Order model, add 'Update reason' and 'Comment'
+a. Create a order-history database
+b. When user clicks update button, the system will automatically save(CREATE REQUEST) a copy of existing order to order-history.
+c. System will hide Update button if no changes is made, there will also be a cancel button to return to previous page.
+d. If user clicks Cancel, we will delete(DELETE REQUEST) the latest order-history data.
+e. If user make changes to order details, update button will show, and if user clicks update, user must input update reason and comment.
+f. Once input is confirmed, the system will not delete order-history. The system will update(PATCH REQUEST) existing order details.
+
+2. In Purchase Order page, we want to display order status.
+- User needs to go into Purchase Order details to change order status. They don't need to go into update order page to change the status.
+
+3. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
+
+4. All Products (Home) should have a filter by Supplier or by Installation Category
+
+5. Change Navbar items
+
+6. Add Search Bar
+
+
+
+
+Other features:
+(New Product Form and Product Details page)
+~ Allow user to add picture when adding new Product.
+~ User can also update product by inserting product image.
+
 ***(New form NewProject, new page ProjectList)
 ~ Create a new page for ProjectList, a new page for NewProject form
 ~ Create admin authentication to access this page
 
 ***(Additional Feature: Lumen * Length calculator)
 ~ When user selects 'Lumen' as UOM, input textbox 'Length' will pop up for input. It calculates how much each STUD cost.
-
-
-Bell Plaster 
--Plasterboard
--Framing Wall
--Framing Ceiling
--Insulation
--Other
-
-Intex
--Plasterboard
--Framing Wall
--Framing Ceiling
--Other
-
-SpeedPanel
--No filter
-
-AllFasterner
--Plasterboard
--Framing Wall
--Framing Ceiling
--Other
-
-Hilti
--Plasterboard
--Framing Wall
--Framing Ceiling
--Other
-
-CSP Plasterboard
--Plasterboard
--Insulation
--Other
-
-K8
--Insulation
--Other
-
-Comfab
--Framing Wall
--Framing Ceiling
--Other
-
-Demar H Hardware
--No filter
-
-Prostud
--No filter
-
-United Equipment
--No filter

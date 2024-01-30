@@ -141,3 +141,7 @@ tr:hover {
   background-color: #9290e6;
   cursor: pointer;
 }
+
+.nav-items li {
+  display: inline-block;
+}
