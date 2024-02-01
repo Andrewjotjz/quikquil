@@ -5,15 +5,18 @@ import App from './App';
 import ProductsContextProvider from "./contexts/ProductsContext";
 import OrdersContextProvider from "./contexts/OrdersContext";
 import ProjectsContextProvider from "./contexts/ProjectsContext";
+import OrderHistoryContextProvider from './contexts/OrderHistoryContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ProductsContextProvider>
       <OrdersContextProvider>
-        <ProjectsContextProvider>
-          <App />
-        </ProjectsContextProvider>
+        <OrderHistoryContextProvider>
+          <ProjectsContextProvider>
+            <App />
+          </ProjectsContextProvider>
+        </OrderHistoryContextProvider>
       </OrdersContextProvider>
     </ProductsContextProvider>
   </React.StrictMode>

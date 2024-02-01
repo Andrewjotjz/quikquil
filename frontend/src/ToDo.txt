@@ -56,6 +56,10 @@
         - we need to create a view to show 'before edit' and 'after edit'
 ~ We also want to delete Order Details (DELETE request to orderdb.json)
 
+
+-------------NEW YEAR 2024---------------
+
+
 (DONE 29JAN2024)
 - change 'Other' to 'Others'
 - edited Installation_Category items
@@ -63,26 +67,38 @@
 - switched hard-coded supplier list to using .map()
 - switched hard-coded Product_UOM to using .map and .filter()
 
+(DONE 1FEB2024)
 1. When Update Order page is rendered, we will save a copy of the data. User will make changes to the order, user will need to add comment for changes.
 - In Purchase Order details, there will be a section that shows recent changes.
-a. Create a new entry for Order model, add 'Update reason' and 'Comment'
-a. Create a order-history database
-b. When user clicks update button, the system will automatically save(CREATE REQUEST) a copy of existing order to order-history.
-c. System will hide Update button if no changes is made, there will also be a cancel button to return to previous page.
-d. If user clicks Cancel, we will delete(DELETE REQUEST) the latest order-history data.
-e. If user make changes to order details, update button will show, and if user clicks update, user must input update reason and comment.
-f. Once input is confirmed, the system will not delete order-history. The system will update(PATCH REQUEST) existing order details.
+a. Create a new entry for Order model, add 'Update reason' and 'Comment' (done)
+a. Create a order-history database (done)
+b. In Order Details page, When user clicks update button, the system will navigate to Update Order form.(done)
+c. System will hide Update button if no changes is made to the form, there will also be a 'Cancel Update' button to return to previous page. (done)
+d. If user clicks 'Cancel Update', we will return to Order Details page. (done)
+e. If user make changes to order details, update button will show, and if user clicks update, user must input update reason and comment. (done)
+f. Once reason input is confirmed, the system will create order-history using (POST request). The system will update(PATCH REQUEST) existing order details. (done)
 
-2. In Purchase Order page, we want to display order status.
+
+
+
+
+2. In Order Details page, we want to display order-history.
+a. we want to check if this existing order has previously been updated. To check, we use property 'createdAt' === 'updatedAt'. If same, we display 'This order has not been revised'.
+If not same, meaning the order has previously been updated, then we display 'This order has previously been revised by who who on what what date', and we also display a button to show order history.
+b. By pulling data from order-history database, we will map all order history based on 'Order_ID', NOT '_id'.
+
+3. In Purchase Order page, we want to display order status.
 - User needs to go into Purchase Order details to change order status. They don't need to go into update order page to change the status.
 
-3. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
+4. Fix filtering system (checkboxes)
 
-4. All Products (Home) should have a filter by Supplier or by Installation Category
+5. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
 
-5. Change Navbar items
+6. All Products (Home) should have a filter by Supplier or by Installation Category
 
-6. Add Search Bar
+7. Change Navbar items
+
+8. Add Search Bar
 
 
 

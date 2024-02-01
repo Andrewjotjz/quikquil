@@ -11,8 +11,8 @@ const OrderDetails = () => {
 
   const location = useLocation();
 
-  //Retrieve data
-  const data = location.state || "";
+  //Retrieve selectedID from cursor pointer at OrderList.js
+  const selectedID = location.state || "";
 
   // Function to format the date before rendering
   const formatOrderDate = (dateString) => {
@@ -41,10 +41,10 @@ const OrderDetails = () => {
       const abortCont = new AbortController();
   
       // setTimeout(() => {
-        fetch('/api/orders/'+ data, { signal: abortCont.signal })
+        fetch('/api/orders/'+ selectedID, { signal: abortCont.signal })
         .then(res => {
           if (!res.ok) { // error coming back from server
-            throw Error(`could not fetch the data for that resource: "/api/orders/${data}". Please check your database connection.`);
+            throw Error(`could not fetch the data for that resource: "/api/orders/${selectedID}". Please check your database connection.`);
           } 
           return res.json();
         })
@@ -67,14 +67,14 @@ const OrderDetails = () => {
       // abort the fetch
       return () => abortCont.abort();
 
-    }, [dispatch3, data])
+    }, [dispatch3, selectedID])
 
   const handleUpdate = () => {
+
     history.push({
       pathname: "/updateorder",
       state: orders
-  })
-
+    })
   }
 
   const handleDelete = () => {
@@ -84,15 +84,15 @@ const OrderDetails = () => {
     //if user clicks OK, clear all selected orders, add first product entry
     if (shouldDeleteOrder) {
       const abortCont = new AbortController();
-      fetch('/api/orders/'+ data, { signal: abortCont.signal, method: 'DELETE' })
+      fetch('/api/orders/'+ selectedID, { signal: abortCont.signal, method: 'DELETE' })
       .then(res => {
         if (!res.ok) { // error coming back from server
-          throw Error(`could not fetch the data for that resource: "/api/orders/${data}". DELETE request failed. Please check your database connection.`);
+          throw Error(`could not fetch the data for that resource: "/api/orders/${selectedID}". DELETE request failed. Please check your database connection.`);
         } 
         return res.json();
       })
       .then(() => {
-        dispatch3({type: 'DELETE_PRODUCT', payload:  { _id: data }})
+        dispatch3({type: 'DELETE_PRODUCT', payload:  { _id: selectedID }})
         setError(null);
         console.log('Data has been deleted:', orders);
         history.push({
@@ -124,7 +124,8 @@ const OrderDetails = () => {
   return ( 
       <div className="order-details">
           {orders && 
-          <h2><b>Order No:</b> {orders.Order_No}</h2>}
+          <h2><b>Order No:</b> {orders.Order_No}</h2>
+          }
           <label><b>Project ID:</b> {orders.Project_ID}</label>
           <br/>
           <label><b>Location:</b> {orders.Location}</label>

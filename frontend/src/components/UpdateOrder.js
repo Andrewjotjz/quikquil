@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useOrdersContext } from '../hooks/useOrdersContext'
 import { useProductsContext } from '../hooks/useProductsContext'
 import { useProjectsContext } from '../hooks/useProjectsContext'
+import { useOrderHistoryContext } from '../hooks/useOrderHistoryContext';
 
 import Cart from '../pages/Cart';
 
@@ -14,8 +15,12 @@ const UpdateOrder = () => {
 
   const history = useHistory();
 
+  const [reason, setReason] = useState("");
+  const [comment, setComment] = useState("");
+  const [isFormModified, setFormModified] = useState(false);
   const [selectedProductCode, setSelectedProductCode] = useState('');
   const [selectedProductQty, setSelectedProductQty] = useState('');
+  const [isCartModalOpen, setCartModalOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const orderNo = data.Order_No;
   const [newProject, setProject] = useState(data.Project_ID);
@@ -34,6 +39,7 @@ const UpdateOrder = () => {
   const {projects, dispatch2 } = useProjectsContext();
   const {dispatch3} = useOrdersContext();
   const [error_Orders, setError] = useState(null);
+  const {dispatch4} = useOrderHistoryContext();
     
   useEffect(() => {
     const abortCont = new AbortController();
@@ -103,6 +109,14 @@ const UpdateOrder = () => {
   },[data.Products])
 
   
+  const handleOpenCartModal = () => {
+    setCartModalOpen(true);
+  };
+
+  const handleCloseCartModal = () => {
+    setCartModalOpen(false);
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -110,6 +124,26 @@ const UpdateOrder = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
+
+  const handleProjectChange = (e) => {
+    setProject(e.target.value)
+    setFormModified(true);
+  }
+
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value)
+    setFormModified(true);
+  }
+
+  const handleOrderDateChange = (e) => {
+    setOrderDate(e.target.value)
+    setFormModified(true);
+  }
+
+  const handleDeliveryDateTimeChange = (e) => {
+    setDeliveryDatetime(e.target.value)
+    setFormModified(true);
+  }
 
   // When checkbox is checked, handle changes
   const handleCheckboxChange = (e) => {
@@ -127,6 +161,7 @@ const UpdateOrder = () => {
 
     // Log the updated installationCategory array
     setInstallationCategory(updatedCategories)
+    setFormModified(false);
   };
 
   const handleSelectedProduct = (value) => {
@@ -182,6 +217,7 @@ const UpdateOrder = () => {
       setSelectedProductCode('')
       setSelectedProductQty(1)
     }
+    setFormModified(true);
   }
 
   //'Remove Product' button, removes a row of TextBox from the form
@@ -189,7 +225,19 @@ const UpdateOrder = () => {
       const updatedProducts = [...newProducts];
       updatedProducts.splice(index, 1);
       setProducts(updatedProducts);
+      setFormModified(true);
   };
+
+  //'Cancel' button, remove latest entry of order history and return to previous page
+  const handleCancel = () => {
+    const shouldDeleteOrderHistory = window.confirm(
+      'Are you sure you want to leave this page?'
+    );
+    //if user clicks OK, clear all selected orders, add first product entry
+    if (shouldDeleteOrderHistory) {
+      history.goBack();
+    }
+  }
 
 
   // Handle form submission
@@ -201,63 +249,81 @@ const UpdateOrder = () => {
       alert("No products were added. Please select products and add to cart.");
       return;
     }
+
     const shouldUpdateOrder = window.confirm(
         'Are you sure you want to make changes to this order?'
       );
-      //if user clicks OK, clear all selected products, add first product entry
-      if (shouldUpdateOrder) {
-        
-        //check if products are added to cart
-        if (newProducts.length === 1 && Object.values(newProducts[0]).every(value => value === '')) {
-        alert("No products were added. Please select products and add to cart.");
-        return;
-        }
 
-        //create Order object
-        const newOrder = {
-        Order_No: orderNo,
-        Project_ID: newProject,
-        Location: location,
-        Order_date: orderDate,
-        Delivery_datetime: deliveryDatetime,
-        Products: newProducts,
-        };
+    //if user clicks OK, clear all selected products, add first product entry
+    if (shouldUpdateOrder) {
+      
+      //check if products are added to cart
+      if (newProducts.length === 1 && Object.values(newProducts[0]).every(value => value === '')) {
+      alert("No products were added. Please select products and add to cart.");
+      return;
+      }
 
-        const abortCont = new AbortController();
+    //create Order History object
+    const newHistoryOrder = data;
+    newHistoryOrder["Order_update_reason"] = reason;
+    newHistoryOrder["Order_update_comment"] = comment;
+    // Logic to save existing Order details to Order-History database or POST existing Order object to  Order-History database
+    fetch('/api/order_history/create', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newHistoryOrder)
+    }).then(() => {
+        console.log('New Order History submitted:', newHistoryOrder);
+        dispatch4({type: 'CREATE_ORDER_HISTORY', payload: newHistoryOrder})
+    })
 
-        // Logic to save formData to the database or POST existing Order object to database
-        fetch('/api/orders/' + data._id, { 
-            signal: abortCont.signal, method: 'PATCH',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newOrder) 
+      //create Order object
+      const newOrder = {
+      Order_No: orderNo,
+      Project_ID: newProject,
+      Location: location,
+      Order_date: orderDate,
+      Delivery_datetime: deliveryDatetime,
+      Products: newProducts,
+      };
+
+      const abortCont = new AbortController();
+
+      // Logic to save formData to the database or POST existing Order object to database
+      fetch('/api/orders/' + data._id, { 
+          signal: abortCont.signal, method: 'PATCH',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newOrder) 
+      })
+      .then(res => {
+          if (!res.ok) { // error coming back from server
+            throw Error(`could not fetch the data for that resource: "/api/products/${data._id}". PATCH request failed. Please check your database connection.`);
+          } 
+          return res.json();
         })
-        .then(res => {
-            if (!res.ok) { // error coming back from server
-              throw Error(`could not fetch the data for that resource: "/api/products/${data._id}". PATCH request failed. Please check your database connection.`);
-            } 
-            return res.json();
-          })
-          .then(() => {
-            dispatch3({type: 'UPDATE_ORDER', payload: newOrder})
-            setError(null);
-            console.log('Form data submitted to update with:', newOrder);
-            history.push({
-              pathname: "/orderdetails",
-              state: data._id
-          })
-          })
-          .catch(err => {
-            if (err.name === 'AbortError') {
-              console.log('fetch aborted')
-            } else {
-              // auto catches network / connection error
-              setError(err.message);
-            }
-          })
-        }
-    else {
-        return
-    }
+        .then(() => {
+          dispatch3({type: 'UPDATE_ORDER', payload: newOrder})
+          setError(null);
+          console.log('Form data submitted to update with:', newOrder);
+          history.push({
+            pathname: "/orderdetails",
+            state: data._id
+        })
+        })
+        .catch(err => {
+          if (err.name === 'AbortError') {
+            console.log('fetch aborted')
+          } else {
+            // auto catches network / connection error
+            setError(err.message);
+          }
+        })
+        setFormModified(false);
+      }
+  else {
+      return
+  }
+    
 };
 
 if (error_Products) {
@@ -286,7 +352,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
       <div>
         <label>
           Project:
-          <select value={newProject} onChange={(e) => setProject(e.target.value)} required>
+          <select value={newProject} onChange={(e) => handleProjectChange(e)} required>
             <option value="" disabled>Select a Project</option>
             {projects &&
             projects.map((project) => (
@@ -302,7 +368,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
       <div>
         <label>
           Location:
-          <input required type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+          <input required type="text" value={location} onChange={(e) => handleLocationChange(e)} />
         </label>
       </div>
 
@@ -317,7 +383,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
       <div>
         <label>
           Order Date:
-          <input required type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} />
+          <input required type="date" value={orderDate} onChange={(e) => handleOrderDateChange(e)} />
         </label>
       </div>
 
@@ -330,7 +396,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
             required
             type="datetime-local"
             value={deliveryDatetime}
-            onChange={(e) => setDeliveryDatetime(e.target.value)}
+            onChange={(e) => handleDeliveryDateTimeChange(e)}
           />
         </label>
       </div>
@@ -382,21 +448,33 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
           Add to Cart
         </button>
       </div>
+      <div className='update-order-cart'>
+        <button type="button" onClick={handleOpenCartModal}>
+          Show Cart
+        </button>
+      </div>
 
+      <br />
+      <button type="button" onClick={handleCancel}>Cancel Update</button>
+      {isFormModified && (<button type="button" onClick={handleOpenModal}>Save Changes</button>)}
 
+      { isModalOpen &&
+      <div>
+        <label>
+          Update reason:
+          <input required type="text" value={reason} onChange={(e) => setReason(e.target.value)} />
+        </label>
+        <label>
+          Additional comment:
+          <input required type="text" value={comment} onChange={(e) => setComment(e.target.value)} />
+        </label>
+        <button type="submit">Submit</button>
+        <button onClick={handleCloseModal}>Cancel</button>
+      </div>
+      }  
 
-    <br />
-    <button type="submit">Update</button>
     </form>
-
-
-    <br />
-    <div className='update-order-cart'>
-      <button type="button" onClick={handleOpenModal}>
-        Show Cart
-      </button>
-      <Cart isOpen={isModalOpen} onClose={handleCloseModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
-    </div>
+    <Cart isOpen={isCartModalOpen} onClose={handleCloseCartModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
   </div>
   );
 };

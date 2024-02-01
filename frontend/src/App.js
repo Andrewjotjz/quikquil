@@ -8,6 +8,7 @@ import PurchaseOrder from "./components/PurchaseOrder";
 import ProductDetails from "./pages/ProductDetails";
 import OrderDetails from "./pages/OrderDetails";
 import UpdateOrder from "./components/UpdateOrder";
+import Test from "./components/Test";
 
 
 
@@ -42,6 +43,9 @@ function App() {
                   </Route>
                   <Route exact path="/neworder">
                     <NewOrder/>
+                  </Route>
+                  <Route exact path="/test">
+                    <Test/>
                   </Route>
                 </Switch>
               </div>
