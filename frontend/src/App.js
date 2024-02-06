@@ -8,7 +8,7 @@ import PurchaseOrder from "./components/PurchaseOrder";
 import ProductDetails from "./pages/ProductDetails";
 import OrderDetails from "./pages/OrderDetails";
 import UpdateOrder from "./components/UpdateOrder";
-import Test from "./components/Test";
+import Test2 from "./components/Test2";
 
 
 
@@ -45,7 +45,7 @@ function App() {
                     <NewOrder/>
                   </Route>
                   <Route exact path="/test">
-                    <Test/>
+                    <Test2/>
                   </Route>
                 </Switch>
               </div>
