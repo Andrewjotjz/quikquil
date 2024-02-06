@@ -155,6 +155,7 @@ const OrderDetails = () => {
   const handleShowComparison = () => {
     if (isCompared) {
       //Logic to display filtered orders (filtered from discrepancy)
+      console.log(ProductsDiscrepancyArray)
       const productsInOrderHistory = ProductsDiscrepancyArray.map(product => product.Product_Code);
       setFilteredOrders(orders.Products.filter(product => !productsInOrderHistory.includes(product.Product_Code)));
       setisShowComparison(true);
@@ -245,31 +246,34 @@ const OrderDetails = () => {
               </li>
             ))}
             {ProductsDiscrepancyArray.map(product => (
-              <li key={product.Product_Code} style={{ color: product.discrepancy === 'added' ? "mediumseagreen" : "indianred" }}>
-                {product.Product_Code} - {product.Product_Name} - Qty: {product.Qty_per_UOM} ({product.discrepancy})
-                {product.discrepancy === 'quantity change' && ` (Previous Qty: ${product.historyQty_per_UOM})`}
+              <li key={product.Product_Code} style={{ color: product.discrepancy === 'added' || product.discrepancy === 'quantity changed' ? "mediumseagreen" : "indianred" }}>
+                {product.Product_Code} - {product.Product_Name} - Qty: {product.historyQty_per_UOM} ({product.discrepancy}) {product.discrepancy === 'quantity changed' && ` (Previous Qty: ${product.Qty_per_UOM})`}
               </li>
             ))}
             </ul>}
-            {isShowOrderHistory && <button id="btn-compare-products" onClick={handleShowComparison}>See product changes</button>}
+            {isShowOrderHistory && <button id="btn-compare-products" onClick={handleShowComparison}>See order changes</button>}
             <br/>
-            <label><b>Last Revised:</b>
+            <label><b>Last Revised:</b></label>
             {
             orders.createdAt === orders.updatedAt ? (
               <label>None</label>
               ) : (
-              <div style={{display:"inline-block"}}><label>{formatOrderDate(orders.updatedAt)} {formatOrderTime(orders.updatedAt)}</label><button id="btn-order-history" onClick={handleDisplayOrderHistory}>Order History</button></div>)
+              <div style={{display:"inline-block"}}>
+                <label>{formatOrderDate(orders.updatedAt)} {formatOrderTime(orders.updatedAt)}</label>
+                <button id="btn-order-history" onClick={handleDisplayOrderHistory}>Order History</button>
+              </div>)
             }
-            </label>
+            <br/>
             <button onClick={handleUpdate}>Update</button>
             <button onClick={handleDelete}>Delete</button>
           </div>
 
           { isShowOrderHistory &&
-          <div className="order-history-details" style={{color: "darkslategrey" }}>
+          <div className="order-history-details" style={{color: "darkred" }}>
             <h2 style={{borderTop:"2px solid grey" }}>Order History</h2>
-            { order_history.filter(item => item.Order_No === orders.Order_No).map(historyItem => (
+            { order_history.filter(item => item.Order_No === orders.Order_No).map( (historyItem, index) => (
               <div key={historyItem._id} style={{borderBottom:"1px solid grey"}}>
+                <h3><b>Version {order_history.filter(item => item.Order_No === orders.Order_No).length - index}</b></h3>
                 <label><b>Project ID:</b> {historyItem.Project_ID}</label>
                 <br/>
                 <label><b>Location:</b> {historyItem.Location}</label>

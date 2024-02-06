@@ -81,11 +81,13 @@ f. Once reason input is confirmed, the system will create order-history using (P
 
 
 
-
+(DONE 6FEB2024)
 2. In Order Details page, we want to display order-history.
 a. we want to check if this existing order has previously been updated. To check, we use property 'createdAt' === 'updatedAt'. If same, we display 'This order has not been revised'.
 If not same, meaning the order has previously been updated, then we display 'This order has previously been revised by who who on what what date', and we also display a button to show order history.
 b. By pulling data from order-history database, we will map all order history based on 'Order_ID', NOT '_id'.
+
+
 
 3. In Purchase Order page, we want to display order status.
 - User needs to go into Purchase Order details to change order status. They don't need to go into update order page to change the status.
