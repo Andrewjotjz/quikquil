@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { useProductsContext } from "../hooks/useProductsContext"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetails = () => {
   
@@ -32,7 +34,6 @@ const ProductDetails = () => {
         })
         .catch(err => {
           if (err.name === 'AbortError') {
-            console.log('fetch aborted')
           } else {
             // auto catches network / connection error
             setIsPending(false);
@@ -71,19 +72,21 @@ const ProductDetails = () => {
       .then(() => {
         dispatch({type: 'DELETE_PRODUCT', payload:  { _id: data }})
         setError(null);
-        console.log('Data has been deleted:', products);
         history.push({
           pathname: "/"
         })
       })
       .catch(err => {
         if (err.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setError(err.message);
         }
       })
+      // Toast notification
+      toast.success(`Product successfully deleted!`, {
+        position: "top-right"
+      });
     }
     else{
       return

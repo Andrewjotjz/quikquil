@@ -27,10 +27,10 @@ const getSingleOrder = async (req,res) => {
 }
 
 const createNewOrder = async (req,res) => {
-    const { Order_No, Project_ID, Location, Order_date, Delivery_datetime, Products } = req.body
+    const { Order_No, Project_ID, Location, Order_date, Delivery_datetime, Products, Order_status } = req.body
         
     try {
-        const Order = await order.create({ Order_No, Project_ID, Location, Order_date, Delivery_datetime, Products })
+        const Order = await order.create({ Order_No, Project_ID, Location, Order_date, Delivery_datetime, Products, Order_status })
             res.status(200).json(Order)
     }
     catch (error) {

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useOrdersContext } from '../hooks/useOrdersContext'
 import { useProductsContext } from '../hooks/useProductsContext'
@@ -23,6 +25,7 @@ const UpdateOrder = () => {
   const [isCartModalOpen, setCartModalOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const orderNo = data.Order_No;
+  const orderStatus = data.Order_status;
   const [newProject, setProject] = useState(data.Project_ID);
   const [location, setLocation] = useState(data.Location);
   const supplier = data.Products[0].Supplier_Name;
@@ -59,7 +62,6 @@ const UpdateOrder = () => {
       })
       .catch(err1 => {
         if (err1.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setIsPendingProducts(false);
@@ -90,7 +92,6 @@ const UpdateOrder = () => {
       })
       .catch(err2 => {
         if (err2.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setIsPendingProjects(false);
@@ -168,19 +169,24 @@ const UpdateOrder = () => {
     setSelectedProductCode(value);
     setSelectedProductQty('');
   }
+
   const handleSelectedProductQty = (value) => {
     setSelectedProductQty(value);
   }
 
-
   const handleAddToCart = () => {
     if (selectedProductCode === ''){
-      alert(`Please select a product.`)
+      // Error notification
+      toast.error(`Please select a product`, {
+        position: "top-right"
+      });
       return
     }
 
     if (selectedProductQty === ''){
-      alert(`Please select quantity for '${products.find((product) => product.Product_Code === selectedProductCode).Product_Name}'`)
+      toast.error(`Please input quantity for '${products.find((product) => product.Product_Code === selectedProductCode).Product_Name}'`, {
+        position: "top-right"
+      });
       return
     }
 
@@ -189,11 +195,17 @@ const UpdateOrder = () => {
 
     // if duplicate is not true, add a new input entry
     if (isDuplicate) {
-      alert(`'${products.find((product) => product.Product_Code === selectedProductCode).Product_Name}' is already added to your cart.`)
+      // Error notification
+      toast.error(`"${products.find((product) => product.Product_Code === selectedProductCode).Product_Name}" is already added to your cart`, {
+        position: "top-right"
+      });
       return
     }
 
-    
+    // Show Add-to-Cart notification
+    toast.success(`"${products.find((product) => product.Product_Code === selectedProductCode).Product_Name}" added to the cart`, {
+      position: "top-right"
+    });
 
     let productToAdd = ''
     // Find the selected product from productOptions and update Product_Name and Supplier_Name
@@ -220,12 +232,23 @@ const UpdateOrder = () => {
     setFormModified(true);
   }
 
-  //'Remove Product' button, removes a row of TextBox from the form
+  //'Remove Product' button, removes a product by index from the order
   const handleRemoveProduct = (index) => {
       const updatedProducts = [...newProducts];
       updatedProducts.splice(index, 1);
       setProducts(updatedProducts);
       setFormModified(true);
+  };
+
+   //When user wants to edit quantity in Cart
+   const handleEditQty = (index, newQty) => {
+    const updatedProducts = [...newProducts];
+    updatedProducts[index] = {
+      ...updatedProducts[index],
+      Qty_per_UOM: newQty
+    };
+    setProducts(updatedProducts);
+    setFormModified(true);
   };
 
   //'Cancel' button, remove latest entry of order history and return to previous page
@@ -273,7 +296,6 @@ const UpdateOrder = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newHistoryOrder)
     }).then(() => {
-        console.log('New Order History submitted:', newHistoryOrder);
         dispatch4({type: 'CREATE_ORDER_HISTORY', payload: newHistoryOrder})
     })
 
@@ -285,6 +307,7 @@ const UpdateOrder = () => {
       Order_date: orderDate,
       Delivery_datetime: deliveryDatetime,
       Products: newProducts,
+      Order_status: orderStatus
       };
 
       const abortCont = new AbortController();
@@ -304,15 +327,18 @@ const UpdateOrder = () => {
         .then(() => {
           dispatch3({type: 'UPDATE_ORDER', payload: newOrder})
           setError(null);
-          console.log('Form data submitted to update with:', newOrder);
           history.push({
             pathname: "/orderdetails",
             state: data._id
-        })
+          })
+          // Order updated notification
+          toast.success(`Order successfully updated!`, {
+            position: "top-right"
+          });
+          return
         })
         .catch(err => {
           if (err.name === 'AbortError') {
-            console.log('fetch aborted')
           } else {
             // auto catches network / connection error
             setError(err.message);
@@ -403,19 +429,25 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
 
       <br />
 
-      <div className='update-order-product-filter'>
+      <div className='new-order-product-filter'>
       <h3>Products:</h3>
-        <fieldset id="fieldset-filter">
+      <fieldset id="fieldset-filter">
           <legend>Apply Filter:</legend>
-            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Plasterboard")}/>
+            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} />
             <label htmlFor="plasterboard">Plasterboard</label>
-            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Wall")}/>
+            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)}/>
             <label htmlFor="framing_wall">Framing Wall</label>
-            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Framing Ceiling")}/>
+            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)}/>
             <label htmlFor="framing_ceiling">Framing Ceiling</label>
-            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)} checked={installationCategory.includes("Insulation")}/>
+            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)}/>
             <label htmlFor="insulation">Insulation</label>
-            <input type="checkbox" id="chk-others" name="others" value="Others" checked disabled/>
+            <input type="checkbox" id="chk-compound" name="compound" value="Compound" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="compound">Compound</label>
+            <input type="checkbox" id="chk-fasterner" name="fasterner" value="Fasterner" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="fasterner">Fasterner</label>
+            <input type="checkbox" id="chk-speedpanel" name="speedpanel" value="SpeedPanel" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="speedpanel">SpeedPanel</label>
+            <input type="checkbox" id="chk-others" name="others" checked disabled value="Others"/>
             <label htmlFor="others">Others</label>
         </fieldset>
       </div>
@@ -474,7 +506,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
       }  
 
     </form>
-    <Cart isOpen={isCartModalOpen} onClose={handleCloseCartModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct}/>
+    <Cart isOpen={isCartModalOpen} onClose={handleCloseCartModal} cartData={newProducts} handleRemoveProduct={handleRemoveProduct} handleEditQty={handleEditQty}/>
   </div>
   );
 };

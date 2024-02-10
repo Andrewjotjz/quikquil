@@ -86,21 +86,35 @@ f. Once reason input is confirmed, the system will create order-history using (P
 a. we want to check if this existing order has previously been updated. To check, we use property 'createdAt' === 'updatedAt'. If same, we display 'This order has not been revised'.
 If not same, meaning the order has previously been updated, then we display 'This order has previously been revised by who who on what what date', and we also display a button to show order history.
 b. By pulling data from order-history database, we will map all order history based on 'Order_ID', NOT '_id'.
+c. Add two labels: Update reason and Update comment to 'Order Details'
 
 
-
+(DONE 7FEB2024)
 3. In Purchase Order page, we want to display order status.
 - User needs to go into Purchase Order details to change order status. They don't need to go into update order page to change the status.
+- add backgroundColor to different order status
 
+(DONE 8FEB2024)
+Instead of Deleting Orders, change the status as Deactivated and change background to grey.
+
+(DONE 8FEB2024)
 4. Fix filtering system (checkboxes)
 
-5. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
+(DONE 9FEB2024)
+5. Able to edit QTY during Edit order
 
-6. All Products (Home) should have a filter by Supplier or by Installation Category
+(DONE 10FEB2024)
+6. 'All Products' should have a filter by Supplier or by Installation Category
 
-7. Change Navbar items
+(DONE 9FEB2024)
+7. Add Search Bar (DONE for Homepage)
+- Add Search Bar to Purchase Order
 
-8. Add Search Bar
+8. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
+
+10. Make further improvements to filtering system for Checkboxes
+
+
 
 
 

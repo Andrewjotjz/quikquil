@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import App from './App';
 import ProductsContextProvider from "./contexts/ProductsContext";
@@ -15,6 +17,7 @@ root.render(
         <OrderHistoryContextProvider>
           <ProjectsContextProvider>
             <App />
+            <ToastContainer />
           </ProjectsContextProvider>
         </OrderHistoryContextProvider>
       </OrdersContextProvider>

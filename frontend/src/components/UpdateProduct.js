@@ -1,6 +1,8 @@
 import { useState} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useProductsContext } from "../hooks/useProductsContext"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateProduct = () => {
   //Retrieve data
@@ -25,21 +27,23 @@ const UpdateProduct = () => {
     { value: 'Framing Ceiling', label: 'Framing Ceiling' },
     { value: 'Insulation', label: 'Insulation' },
     { value: 'Others', label: 'Others' },
+    { value: 'SpeedPanel', label: 'SpeedPanel' },
+    { value: 'Compound', label: 'Compound' },
+    { value: 'Fasterner', label: 'Fasterner' },
   ]);
 
   // Define mapping between suppliers and allowed Installation Categories
   const installationCategoryOptions = {
-    'Bell Plaster': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Other'],
-    'Intex': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Others'],
-    'SpeedPanel': ['Others'],
-    'AllFasterner': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Others'],
-    'Hilti': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Others'],
-    'CSP Plasterboard' : ['Plasterboard', 'Insulation', 'Others'],
-    'K8' : ['Insulation', 'Others'],
-    'Comfab' : ['Framing Wall', 'Framing Ceiling', 'Others'],
+    'Bell Plaster': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
+    'Intex': ['Framing Ceiling','Fasterner','Others'],
+    'SpeedPanel': ['SpeedPanel'],
+    'AllFasterner': ['Fasterner', 'Others'],
+    'Hilti': ['Fasterner', 'Others'],
+    'CSP Plasterboard' : ['Insulation','Fasterner', 'Others'],
+    'K8' : ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
+    'Comfab' : ['Framing Ceiling', 'Others'],
     'Demar H Hardware' : ['Others'],
-    'Prostud' : ['Others'],
-    'United Equipment' : ['Others']
+    'Prostud' : ['Others']
   };
 
   // Update Installation Categories based on the selected supplier
@@ -78,7 +82,6 @@ const UpdateProduct = () => {
       .then(() => {
         dispatch({type: 'UPDATE_PRODUCT', payload: formData})
         setError(null);
-        console.log('Form data submitted to update with:', formData);
         history.push({
           pathname: "/productdetails",
           state: data._id
@@ -86,12 +89,15 @@ const UpdateProduct = () => {
       })
       .catch(err => {
         if (err.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setError(err.message);
         }
       })
+      // Toast notification
+      toast.success(`Product successfully updated!`, {
+        position: "top-right"
+      });
     }
     else {
       e.preventDefault();
