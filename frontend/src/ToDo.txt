@@ -112,7 +112,9 @@ Instead of Deleting Orders, change the status as Deactivated and change backgrou
 
 8. Add a new dropdown item for UOM called 'custom' and allow user to add custom UOM
 
-10. Make further improvements to filtering system for Checkboxes
+9. Make further improvements to filtering system for Checkboxes
+- If all are uncheck, show default set up
+- else, just filter the one that is checked
 
 
 

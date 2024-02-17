@@ -23,7 +23,6 @@ const [supplier, setSupplier] = useState('');
 const [orderDate, setOrderDate] = useState('');
 const [deliveryDatetime, setDeliveryDatetime] = useState('');
 const [installationCategory, setInstallationCategory] = useState([]);
-const [checkedCategory, setcheckedCategory] = useState([]);
 const [newProducts, setProducts] = useState([{ Product_Code: '', Product_Name: '', Supplier_Name: '', Qty_per_UOM: '', Product_UOM: '' }]);
 
 const {products, dispatch} = useProductsContext();
@@ -35,20 +34,6 @@ const {projects, dispatch2 } = useProjectsContext();
 const {orders, dispatch3} = useOrdersContext();
 const [isPendingOrders, setIsPendingOrders] = useState(true);
 const [error_Orders, setError_Orders] = useState(null);
-
-// Define mapping between suppliers and allowed Installation Categories
-const installationCategoryOptions = {
-  'Bell Plaster': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
-  'Intex': ['Framing Ceiling','Fasterner','Others'],
-  'SpeedPanel': ['SpeedPanel'],
-  'AllFasterner': ['Fasterner', 'Others'],
-  'Hilti': ['Fasterner', 'Others'],
-  'CSP Plasterboard' : ['Insulation','Fasterner', 'Others'],
-  'K8' : ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
-  'Comfab' : ['Framing Ceiling', 'Others'],
-  'Demar H Hardware' : ['Others'],
-  'Prostud' : ['Others']
-};
   
 useEffect(() => {
   const abortCont = new AbortController();
@@ -150,34 +135,88 @@ const handleCloseModal = () => {
 
 // When checkbox is checked, handle changes
 const handleCheckboxChange = (e) => {
-  if (e.target.value === "Select All" && e.target.checked) {
-    setcheckedCategory(installationCategoryOptions[supplier]);
-    return
-  }
-  else if (e.target.value === "Select All" && !e.target.checked) {
-    setcheckedCategory([])
-    return
-  }
-  setcheckedCategory((prevCheckedCategory) => {
-    const updatedCategories = new Set(prevCheckedCategory);
 
-    if (!e.target.checked) {
-      updatedCategories.delete(e.target.value);
-    } else {
-      updatedCategories.add(e.target.value);
-      document.getElementById('chk-selectall').checked = false;
-    }
-    return Array.from(updatedCategories);
-  });
+
+
+  let updatedCategories = [...installationCategory];
+  if (e.target.checked) {
+    // If checkbox is checked, add the value to the array
+    updatedCategories = [...updatedCategories, e.target.value];
+  } else {
+    // If checkbox is unchecked, remove the value from the array
+    updatedCategories = updatedCategories.filter((category) => category !== e.target.value);
+  }
+
+  console.log("updatedCategories: ", updatedCategories)
+  // Log the updated installationCategory array
+  setInstallationCategory(updatedCategories)
 };
-
 
 //When Supplier selection changes, change filter options and reset product form
 const handleSupplierChange = (value) => {
 
-  //to display checkboxes based on specific supplier
-  setInstallationCategory(installationCategoryOptions[value])
-  document.getElementById('chk-selectall').checked = true;
+  // show filter when Supplier Name is 'Bell Plaster'
+  if (value === 'Bell Plaster'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-plasterboard').checked = true;
+    document.getElementById('chk-framing_wall').checked = true;
+    document.getElementById('chk-framing_ceiling').checked = true;
+    document.getElementById('chk-insulation').checked = true;
+    document.getElementById('chk-compound').checked = true;
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Plasterboard','Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner', 'Others'])
+  }
+  else if (value === 'Intex'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-framing_ceiling').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Framing Ceiling', 'Fasterner', 'Others'])
+  }
+  else if (value === 'AllFasterner'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Fasterner', 'Others'])
+  }
+  else if (value === 'Hilti'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Fasterner', 'Others'])
+  }
+  else if (value === 'CSP Plasterboard'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-insulation').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Fasterner', 'Insulation', 'Others'])
+
+  }
+  else if (value === 'K8'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-plasterboard').checked = true;
+    document.getElementById('chk-framing_wall').checked = true;
+    document.getElementById('chk-framing_ceiling').checked = true;
+    document.getElementById('chk-insulation').checked = true;
+    document.getElementById('chk-compound').checked = true;
+    document.getElementById('chk-fasterner').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Plasterboard','Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner', 'Others'])
+  }
+  else if (value === 'Comfab'){
+    document.getElementById('fieldset-filter').style.display = "block"
+    document.getElementById('chk-framing_ceiling').checked = true;
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['Framing Ceiling', 'Others'])
+  }
+  else {
+    document.getElementById('fieldset-filter').style.display = "none"
+    document.getElementById('chk-others').checked = true;
+    setInstallationCategory(['SpeedPanel','Others'])
+  }
+
 
   //if 1st item has a product selected, we prompt user to confirm changes
   if (newProducts[0].Product_Code !== '') {
@@ -454,21 +493,27 @@ return isPendingProducts || isPendingProjects || isPendingOrders ?  (<div>Loadin
       </div>
 
       <br />
-{/* EDITING STARTS HERE ============================================= */}
+
       <div className='new-order-product-filter'>
       <h3>Products:</h3>
-        <fieldset id="fieldset-filter">
+        <fieldset hidden id="fieldset-filter">
           <legend>Apply Filter:</legend>
-          <input type='checkbox'id='chk-selectall' value="Select All" onChange={(e) => handleCheckboxChange(e)}/>
-          <label>Select All</label>
-          { installationCategory && installationCategory.map((category,index) => (
-            <div key={index}>
-              <input type='checkbox' value={category} onChange={(e) => handleCheckboxChange(e)}/>
-              <label>{category}</label>
-            </div>
-          )) }
-            {/* <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} /> */}
-            {/* <label htmlFor="plasterboard">Plasterboard</label> */}
+            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} />
+            <label htmlFor="plasterboard">Plasterboard</label>
+            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="framing_wall">Framing Wall</label>
+            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="framing_ceiling">Framing Ceiling</label>
+            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="insulation">Insulation</label>
+            <input type="checkbox" id="chk-compound" name="compound" value="Compound" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="compound">Compound</label>
+            <input type="checkbox" id="chk-fasterner" name="fasterner" value="Fasterner" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="fasterner">Fasterner</label>
+            <input type="checkbox" id="chk-speedpanel" name="speedpanel" value="SpeedPanel" onChange={(e) => handleCheckboxChange(e)}/>
+            <label htmlFor="speedpanel">SpeedPanel</label>
+            <input type="checkbox" id="chk-others" name="others" onChange={(e) => handleCheckboxChange(e)} value="Others"/>
+            <label htmlFor="others">Others</label>
         </fieldset>
       </div>
       
@@ -479,9 +524,9 @@ return isPendingProducts || isPendingProjects || isPendingOrders ?  (<div>Loadin
             <option value="" disabled>
               Select a product
             </option>
-            {products && products.filter((product) => product.Supplier_Name === supplier && checkedCategory.includes(product.Installation_Category)).map((product) => (
+            {products && products.filter((product) => product.Supplier_Name === supplier && installationCategory.includes(product.Installation_Category)).map((product) => (
             <option key={product.Product_Code} value={product.Product_Code}>
-                {`${product.Product_Code} ${product.Product_Name}`}
+                {`[${product.Product_Code}] ${product.Product_Name}`}
             </option>
             ))} 
           </select>

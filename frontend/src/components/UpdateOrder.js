@@ -461,7 +461,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
             </option>
             {products && products.filter((product) => product.Supplier_Name === supplier && installationCategory.includes(product.Installation_Category)).map((product) => (
             <option key={product.Product_Code} value={product.Product_Code}>
-                {`[${product.Product_Code}] ${product.Product_Name}`}
+                {`${product.Product_Code} ${product.Product_Name}`}
             </option>
             ))} 
           </select>
