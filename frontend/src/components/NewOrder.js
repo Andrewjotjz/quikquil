@@ -16,6 +16,7 @@ const history = useHistory();
 const [selectedProductCode, setSelectedProductCode] = useState('');
 const [selectedProductQty, setSelectedProductQty] = useState('');
 const [isModalOpen, setModalOpen] = useState(false);
+const [ishideFilter, setishideFilter] = useState(true);
 const [orderNo, setOrderNo] = useState('');
 const [newProject, setProject] = useState('');
 const [location, setLocation] = useState('');
@@ -148,7 +149,7 @@ const handleCloseModal = () => {
   setModalOpen(false);
 };
 
-// When checkbox is checked, handle changes
+//When checkbox is checked, handle changes
 const handleCheckboxChange = (e) => {
   if (e.target.value === "Select All" && e.target.checked) {
     setcheckedCategory(installationCategoryOptions[supplier]);
@@ -177,6 +178,7 @@ const handleSupplierChange = (value) => {
 
   //to display checkboxes based on specific supplier
   setInstallationCategory(installationCategoryOptions[value])
+  setishideFilter(false);
   document.getElementById('chk-selectall').checked = true;
 
   //if 1st item has a product selected, we prompt user to confirm changes
@@ -454,21 +456,19 @@ return isPendingProducts || isPendingProjects || isPendingOrders ?  (<div>Loadin
       </div>
 
       <br />
-{/* EDITING STARTS HERE ============================================= */}
+      
       <div className='new-order-product-filter'>
       <h3>Products:</h3>
-        <fieldset id="fieldset-filter">
+        <fieldset id="fieldset-filter" hidden={ishideFilter}>
           <legend>Apply Filter:</legend>
-          <input type='checkbox'id='chk-selectall' value="Select All" onChange={(e) => handleCheckboxChange(e)}/>
-          <label>Select All</label>
+            <input type='checkbox'id='chk-selectall' value="Select All" onChange={(e) => handleCheckboxChange(e)}/>
+            <label>Select All</label>
           { installationCategory && installationCategory.map((category,index) => (
             <div key={index}>
               <input type='checkbox' value={category} onChange={(e) => handleCheckboxChange(e)}/>
               <label>{category}</label>
             </div>
           )) }
-            {/* <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} /> */}
-            {/* <label htmlFor="plasterboard">Plasterboard</label> */}
         </fieldset>
       </div>
       
