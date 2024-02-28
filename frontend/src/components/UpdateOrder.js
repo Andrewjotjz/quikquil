@@ -31,7 +31,7 @@ const UpdateOrder = () => {
   const supplier = data.Products[0].Supplier_Name;
   const [orderDate, setOrderDate] = useState(data.Order_date.split('T')[0]);
   const [deliveryDatetime, setDeliveryDatetime] = useState(data.Delivery_datetime.substring(0, data.Delivery_datetime.lastIndexOf(':')));
-  const [installationCategory, setInstallationCategory] = useState(["Plasterboard","Framing Wall", "Framing Ceiling", "Insulation", "Others"]);
+  const [checkedCategory, setcheckedCategory] = useState([]);
   const [newProducts, setProducts] = useState([{ Product_Code: '', Product_Name: '', Supplier_Name: '', Qty_per_UOM: '', Product_UOM: '' }]);
 
   const {products, dispatch} = useProductsContext();
@@ -43,6 +43,22 @@ const UpdateOrder = () => {
   const {dispatch3} = useOrdersContext();
   const [error_Orders, setError] = useState(null);
   const {dispatch4} = useOrderHistoryContext();
+
+  // Define mapping between suppliers and allowed Installation Categories
+const installationCategoryOptions = {
+  'Bell Plaster': ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
+  'Intex': ['Framing Ceiling','Fasterner','Others'],
+  'SpeedPanel': ['SpeedPanel'],
+  'AllFasterner': ['Fasterner', 'Others'],
+  'Hilti': ['Fasterner', 'Others'],
+  'CSP Plasterboard' : ['Insulation','Fasterner', 'Others'],
+  'K8' : ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
+  'Comfab' : ['Framing Ceiling', 'Others'],
+  'Demar H Hardware' : ['Others'],
+  'Prostud' : ['Others']
+};
+
+const [installationCategory] = useState(installationCategoryOptions[supplier]);
     
   useEffect(() => {
     const abortCont = new AbortController();
@@ -146,24 +162,28 @@ const UpdateOrder = () => {
     setFormModified(true);
   }
 
-  // When checkbox is checked, handle changes
-  const handleCheckboxChange = (e) => {
-    // show filter when Supplier Name is 'Bell Plaster'
-    console.log(e.target.checked, e.target.value)
+//When checkbox is checked, handle changes
+const handleCheckboxChange = (e) => {
+  if (e.target.value === "Select All" && e.target.checked) {
+    setcheckedCategory(installationCategoryOptions[supplier]);
+    return
+  }
+  else if (e.target.value === "Select All" && !e.target.checked) {
+    setcheckedCategory([])
+    return
+  }
+  setcheckedCategory((prevCheckedCategory) => {
+    const updatedCategories = new Set(prevCheckedCategory);
 
-    let updatedCategories = [...installationCategory];
-    if (e.target.checked) {
-      // If checkbox is checked, add the value to the array
-      updatedCategories = [...updatedCategories, e.target.value];
+    if (!e.target.checked) {
+      updatedCategories.delete(e.target.value);
     } else {
-      // If checkbox is unchecked, remove the value from the array
-      updatedCategories = updatedCategories.filter((category) => category !== e.target.value);
+      updatedCategories.add(e.target.value);
+      document.getElementById('chk-selectall').checked = false;
     }
-
-    // Log the updated installationCategory array
-    setInstallationCategory(updatedCategories)
-    setFormModified(false);
-  };
+    return Array.from(updatedCategories);
+  });
+};
 
   const handleSelectedProduct = (value) => {
     setSelectedProductCode(value);
@@ -429,26 +449,18 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
 
       <br />
 
-      <div className='new-order-product-filter'>
+      <div className='update-order-product-filter'>
       <h3>Products:</h3>
-      <fieldset id="fieldset-filter">
+        <fieldset id="fieldset-filter">
           <legend>Apply Filter:</legend>
-            <input type="checkbox" id="chk-plasterboard" name="plasterboard" value="Plasterboard" onChange={(e) => handleCheckboxChange(e)} />
-            <label htmlFor="plasterboard">Plasterboard</label>
-            <input type="checkbox" id="chk-framing_wall" name="framing_wall" value="Framing Wall" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="framing_wall">Framing Wall</label>
-            <input type="checkbox" id="chk-framing_ceiling" name="framing_ceiling" value="Framing Ceiling" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="framing_ceiling">Framing Ceiling</label>
-            <input type="checkbox" id="chk-insulation" name="insulation" value="Insulation" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="insulation">Insulation</label>
-            <input type="checkbox" id="chk-compound" name="compound" value="Compound" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="compound">Compound</label>
-            <input type="checkbox" id="chk-fasterner" name="fasterner" value="Fasterner" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="fasterner">Fasterner</label>
-            <input type="checkbox" id="chk-speedpanel" name="speedpanel" value="SpeedPanel" onChange={(e) => handleCheckboxChange(e)}/>
-            <label htmlFor="speedpanel">SpeedPanel</label>
-            <input type="checkbox" id="chk-others" name="others" checked disabled value="Others"/>
-            <label htmlFor="others">Others</label>
+            <input type='checkbox'id='chk-selectall' value="Select All" onChange={(e) => handleCheckboxChange(e)}/>
+            <label>Select All</label>
+          { installationCategory && installationCategory.map((category,index) => (
+            <div key={index}>
+              <input type='checkbox' value={category} onChange={(e) => handleCheckboxChange(e)}/>
+              <label>{category}</label>
+            </div>
+          )) }
         </fieldset>
       </div>
       
@@ -459,7 +471,7 @@ return isPendingProducts || isPendingProjects ?  (<div>Loading data...</div>) : 
             <option value="" disabled>
               Select a product
             </option>
-            {products && products.filter((product) => product.Supplier_Name === supplier && installationCategory.includes(product.Installation_Category)).map((product) => (
+            {products && products.filter((product) => product.Supplier_Name === supplier && checkedCategory.includes(product.Installation_Category)).map((product) => (
             <option key={product.Product_Code} value={product.Product_Code}>
                 {`${product.Product_Code} ${product.Product_Name}`}
             </option>
