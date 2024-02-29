@@ -5,10 +5,10 @@ const Navbar = () => {
             <h1>QuikQuil System</h1>
             <div className='nav-items'>
                 <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/newproduct">New Product</Link></li>
-                    <li><Link to="/orders">Purchase Orders</Link></li>
-                    <li><Link to="/neworder">New Order</Link></li>
+                    <li><Link to="/quikquil/">Home</Link></li>
+                    <li><Link to="/quikquil/newproduct">New Product</Link></li>
+                    <li><Link to="/quikquil/orders">Purchase Orders</Link></li>
+                    <li><Link to="/quikquil/neworder">New Order</Link></li>
                 </ul>
             </div>
         </nav>

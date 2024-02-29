@@ -19,28 +19,28 @@ function App() {
               <Navbar/>
               <div className="content">
                 <Switch>
-                  <Route exact path="/">
+                  <Route exact path="/quikquil/">
                     <Home/>
                   </Route>
-                  <Route exact path="/updateproduct">
+                  <Route exact path="/quikquil/updateproduct">
                     <UpdateProduct/>
                   </Route>
-                  <Route exact path="/productdetails">
+                  <Route exact path="/quikquil/productdetails">
                     <ProductDetails/>
                   </Route>
-                  <Route exact path="/newproduct">
+                  <Route exact path="/quikquil/newproduct">
                     <NewProduct/>
                   </Route>
-                  <Route exact path="/orders">
+                  <Route exact path="/quikquil/orders">
                     <PurchaseOrder/>
                   </Route>
-                  <Route exact path="/orderdetails">
+                  <Route exact path="/quikquil/orderdetails">
                     <OrderDetails/>
                   </Route>
-                  <Route exact path="/updateorder">
+                  <Route exact path="/quikquil/updateorder">
                     <UpdateOrder/>
                   </Route>
-                  <Route exact path="/neworder">
+                  <Route exact path="/quikquil/neworder">
                     <NewOrder/>
                   </Route>
                 </Switch>
