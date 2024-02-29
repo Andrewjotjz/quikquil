@@ -25,7 +25,6 @@ const Home = () => {
       })
       .catch(err => {
         if (err.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setIsPending(false);

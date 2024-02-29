@@ -1,6 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import { useProductsContext } from "../hooks/useProductsContext"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductForm = () => {
   const [Product_Code, setProductCode] = useState('');
@@ -35,7 +37,7 @@ const ProductForm = () => {
     'Hilti': ['Fasterner', 'Others'],
     'CSP Plasterboard' : ['Insulation','Fasterner', 'Others'],
     'K8' : ['Plasterboard', 'Framing Wall', 'Framing Ceiling', 'Insulation', 'Compound', 'Fasterner','Others'],
-    'Comfab' : ['Framing Ceiling'],
+    'Comfab' : ['Framing Ceiling', 'Others'],
     'Demar H Hardware' : ['Others'],
     'Prostud' : ['Others']
   };
@@ -58,7 +60,6 @@ const ProductForm = () => {
       })
       .catch(err => {
         if (err.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setIsPending(false);
@@ -88,8 +89,11 @@ const ProductForm = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData)
     }).then(() => {
-      console.log('Form data submitted:', formData);
       history.push('/');
+    });
+    // Toast notification
+    toast.success(`New product submitted!`, {
+      position: "top-right"
     });
   };
 

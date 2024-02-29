@@ -1,3 +1,8 @@
+:root {
+--toastify-toast-width: minmax(320px, auto);
+}
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -95,10 +100,6 @@ button:hover {
   background-color: #555;
 }
 
-/* Changed to HIDDEN
-.btn-addProduct:disabled {
-  background-color: grey;
-} */
 
 /* Style the order list */
 ul {
@@ -111,9 +112,6 @@ ul li {
 }
 
 /* Installation Category Filter */
-/* Add this CSS to your stylesheet or in a style tag in your component */
-
-/* Add this CSS to your stylesheet or in a style tag in your component */
 
 fieldset {
   border: 1px solid #ccc;
@@ -145,3 +143,4 @@ tr:hover {
 .nav-items li {
   display: inline-block;
 }
+
