@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/quikquil/static/css/main.7d557d05.css",
-    "main.js": "/quikquil/static/js/main.cb530f0b.js",
+    "main.js": "/quikquil/static/js/main.b39447b2.js",
     "index.html": "/quikquil/index.html",
     "main.7d557d05.css.map": "/quikquil/static/css/main.7d557d05.css.map",
-    "main.cb530f0b.js.map": "/quikquil/static/js/main.cb530f0b.js.map"
+    "main.b39447b2.js.map": "/quikquil/static/js/main.b39447b2.js.map"
   },
   "entrypoints": [
     "static/css/main.7d557d05.css",
-    "static/js/main.cb530f0b.js"
+    "static/js/main.b39447b2.js"
   ]
 }
