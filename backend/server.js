@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const order_historyRoutes = require('./routes/order_historyRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 
 //create express app
@@ -21,6 +22,7 @@ app.use(express.json());
 //route handler
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/order_history', order_historyRoutes);
 app.use('/api/projects', projectRoutes);
 
 //connect to MongoDB

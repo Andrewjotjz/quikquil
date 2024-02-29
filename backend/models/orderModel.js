@@ -52,7 +52,10 @@ const orderSchema = new Schema({
                 type: String
             }
         }
-    ]
+    ],
+    Order_status: {
+        type: String
+    }
 }, {timestamps: true})
 
 //create "orders" COLLECTION using mongoose's model method. Export the model directly.

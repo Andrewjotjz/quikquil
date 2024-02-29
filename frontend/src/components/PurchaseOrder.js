@@ -25,7 +25,6 @@ const PurchaseOrder = () => {
       })
       .catch(err => {
         if (err.name === 'AbortError') {
-          console.log('fetch aborted')
         } else {
           // auto catches network / connection error
           setIsPending(false);
@@ -47,7 +46,7 @@ const PurchaseOrder = () => {
   }
 
   return ( 
-    <div className="home">
+    <div className="purchase-order">
         <h1>Purchase Orders</h1>
         { orders && <OrdersList orders={orders}/>}
     </div>
