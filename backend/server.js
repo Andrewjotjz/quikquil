@@ -2,6 +2,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose');
 const express = require('express');
+const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const order_historyRoutes = require('./routes/order_historyRoutes');
@@ -9,6 +10,9 @@ const projectRoutes = require('./routes/projectRoutes');
 
 //create express app
 const app = express();
+
+// Use CORS middleware
+app.use(cors());
 
 //middleware - logs request path and request method
 app.use((req,res,next) => {
